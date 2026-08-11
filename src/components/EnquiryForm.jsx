@@ -25,11 +25,15 @@ import {
    path, and the WhatsApp path says plainly where files should go instead.
    -------------------------------------------------------------------------- */
 
-const CHANNELS = [
+const ALL_CHANNELS = [
   { value: "whatsapp", label: "WhatsApp", icon: <MessageCircle size={15} aria-hidden /> },
   { value: "email", label: "Email", icon: <Mail size={15} aria-hidden /> },
   { value: "callback", label: "Call me back", icon: <Phone size={15} aria-hidden /> },
 ];
+
+/* The posted paths need a form key. Without one they are not offered at all,
+   rather than being offered and then failing — WhatsApp needs no backend. */
+const CHANNELS = hasFormBackend ? ALL_CHANNELS : ALL_CHANNELS.slice(0, 1);
 
 const BUYER_TYPES = [
   { value: "", label: "Choose one (optional)" },
@@ -66,7 +70,6 @@ export default function EnquiryForm() {
   const busy = status === "sending";
   const isCallback = channel === "callback";
   const isEmailPath = channel === "email";
-  const backendDown = isEmailPath || isCallback ? !hasFormBackend : false;
 
   /**
    * The enquiry as a block of text — used for WhatsApp and as the email body.
@@ -218,15 +221,17 @@ export default function EnquiryForm() {
           : "Tell us what you need and how to reach you."}
       </p>
 
-      <div className="mt-5">
-        <SegmentedControl
-          name="channel"
-          legend="How should we receive this enquiry?"
-          value={channel}
-          onChange={setChannel}
-          options={CHANNELS}
-        />
-      </div>
+      {CHANNELS.length > 1 && (
+        <div className="mt-5">
+          <SegmentedControl
+            name="channel"
+            legend="How should we receive this enquiry?"
+            value={channel}
+            onChange={setChannel}
+            options={CHANNELS}
+          />
+        </div>
+      )}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <TextField
@@ -347,13 +352,6 @@ export default function EnquiryForm() {
         />
       </div>
 
-      {backendDown && (
-        <p className="mt-5 rounded-xl border border-dashed border-navy/25 bg-concrete px-4 py-3 font-mono text-xs text-navy/55">
-          [FORM ENDPOINT — CLIENT TO SUPPLY]. Until a Web3Forms key is set in
-          VITE_FORM_ENDPOINT, this path cannot send. WhatsApp still works.
-        </p>
-      )}
-
       {status === "failed" && (
         <div role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
           <p className="text-sm font-semibold text-red-700">That did not send.</p>
@@ -374,7 +372,7 @@ export default function EnquiryForm() {
 
       <button
         type="submit"
-        disabled={busy || backendDown}
+        disabled={busy}
         className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-mark px-5 py-3.5 font-display font-semibold text-ink transition-colors hover:bg-[#ffd033] disabled:cursor-not-allowed disabled:opacity-55"
       >
         {busy ? (

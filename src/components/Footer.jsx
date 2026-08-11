@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import LogoMark from "./LogoMark";
 import Backdrop from "./Backdrop";
-import { CONTACT, isPlaceholder, telLink, waLink } from "../lib/contact";
+import { CONTACT, telLink, waLink } from "../lib/contact";
 
 export default function Footer() {
   return (
@@ -46,17 +46,15 @@ export default function Footer() {
                 WhatsApp
               </a>
             </li>
-            {!isPlaceholder(CONTACT.email) && (
-              <li>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="inline-flex items-center gap-2 break-all hover:text-white"
-                >
-                  <Mail size={15} aria-hidden />
-                  {CONTACT.email}
-                </a>
-              </li>
-            )}
+            <li>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="inline-flex items-center gap-2 break-all hover:text-white"
+              >
+                <Mail size={15} aria-hidden />
+                {CONTACT.email}
+              </a>
+            </li>
             <li className="inline-flex items-start gap-2">
               <MapPin size={15} aria-hidden className="mt-0.5 shrink-0" />
               {CONTACT.serviceArea.join(" · ")}

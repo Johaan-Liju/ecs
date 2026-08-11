@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Mail, MessageCircle, Phone } from "lucide-react";
-import { isPlaceholder, telLink, waLink } from "../lib/contact";
+import { telLink, waLink } from "../lib/contact";
 
 /**
  * A managing director.
@@ -10,9 +10,8 @@ import { isPlaceholder, telLink, waLink } from "../lib/contact";
  * to a brand monogram of the same 4:5 proportion, so dropping the real
  * portrait in later changes nothing about the layout.
  *
- * `bio` is rendered exactly as passed. When it is still a `[PLACEHOLDER]` it
- * is shown in an obviously unfinished state rather than quietly hidden —
- * never write a bio for a real person.
+ * `bio` and `contact` are optional — the card simply closes up without them.
+ * Never write a bio for a real person; leave it off until they supply one.
  */
 export default function DirectorCard({
   name,
@@ -26,7 +25,6 @@ export default function DirectorCard({
   const reduced = useReducedMotion();
   const [photoFailed, setPhotoFailed] = useState(false);
   const showPhoto = photo && !photoFailed;
-  const bioMissing = isPlaceholder(bio);
 
   const card = reduced
     ? {}
@@ -51,9 +49,10 @@ export default function DirectorCard({
             className="aspect-4/5 w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           />
         ) : (
+          /* Decorative: the name is in the heading directly below, so the
+             monogram adds nothing for a screen reader. */
           <div
-            role="img"
-            aria-label={`${name} — portrait not yet available`}
+            aria-hidden
             className="grid aspect-4/5 w-full place-items-center bg-linear-160 from-navy via-navy-soft to-azure"
           >
             <span className="font-display text-[clamp(3.5rem,12vw,6rem)] font-extrabold tracking-tight text-white/90 transition-transform duration-700 ease-out group-hover:scale-[1.04]">
@@ -76,13 +75,7 @@ export default function DirectorCard({
 
       <p className="eyebrow mt-3 text-azure">{role}</p>
 
-      {bioMissing ? (
-        <p className="mt-4 rounded-xl border border-dashed border-navy/25 bg-concrete px-4 py-3 font-mono text-xs leading-relaxed text-navy/50">
-          {bio}
-        </p>
-      ) : (
-        <p className="mt-4 text-navy/70">{bio}</p>
-      )}
+      {bio && <p className="mt-4 text-navy/70">{bio}</p>}
 
       {contact && (
         <ul className="mt-5 flex flex-wrap gap-4 text-sm">

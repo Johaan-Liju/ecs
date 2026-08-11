@@ -5,7 +5,7 @@ import Reveal from "../components/Reveal";
 import Stagger from "../components/Stagger";
 import EnquiryForm from "../components/EnquiryForm";
 import Backdrop from "../components/Backdrop";
-import { CONTACT, MAP_EMBED, isPlaceholder, telLink, waLink } from "../lib/contact";
+import { CONTACT, MAP_EMBED, telLink, waLink } from "../lib/contact";
 import { useSeo } from "../lib/seo";
 
 export default function Contact() {
@@ -71,16 +71,7 @@ export default function Contact() {
               >
                 <dt className="eyebrow pt-1 text-navy/45">{d.term}</dt>
                 <dd>
-                  <span
-                    className={
-                      "block font-display font-semibold " +
-                      (typeof d.node === "string" && isPlaceholder(d.node)
-                        ? "font-mono text-sm font-normal text-navy/45"
-                        : "text-navy")
-                    }
-                  >
-                    {d.node}
-                  </span>
+                  <span className="block font-display font-semibold text-navy">{d.node}</span>
                   <span className="mt-0.5 block text-sm text-navy/50">{d.note}</span>
                 </dd>
               </Reveal>
@@ -105,23 +96,17 @@ export default function Contact() {
             referrerPolicy="strict-origin-when-cross-origin"
             className="block h-[380px] w-full border-0 grayscale-[0.25] sm:h-[460px]"
           />
-          {isPlaceholder(CONTACT.mapsUrl) ? (
-            <p className="hold py-3 font-mono text-xs text-navy/45">
-              Showing the service area. [EXACT YARD PIN — CLIENT TO SUPPLY]
-            </p>
-          ) : (
-            <p className="hold py-3 text-sm">
-              <a
-                href={CONTACT.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 font-display font-semibold text-navy hover:text-azure"
-              >
-                <MapPin size={15} aria-hidden />
-                Open in Google Maps
-              </a>
-            </p>
-          )}
+          <p className="hold py-3 text-sm">
+            <a
+              href={CONTACT.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-display font-semibold text-navy hover:text-azure"
+            >
+              <MapPin size={15} aria-hidden />
+              Open in Google Maps
+            </a>
+          </p>
         </Reveal>
       </section>
     </>

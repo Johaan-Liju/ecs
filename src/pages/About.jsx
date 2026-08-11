@@ -70,7 +70,6 @@ export default function About() {
               name="Sojan Scaria"
               role="Managing Director"
               photo="/assets/sojan.jpg"
-              bio="[SOJAN SCARIA BIO — 60 TO 90 WORDS, CLIENT TO SUPPLY]"
             />
             {/* don.jpg is not on disk yet; the monogram stands in until it is. */}
             <DirectorCard
@@ -78,7 +77,6 @@ export default function About() {
               role="Managing Director"
               photo="/assets/don.jpg"
               initials="DS"
-              bio="[DON SOJAN BIO — 60 TO 90 WORDS, CLIENT TO SUPPLY]"
               delay={0.12}
             />
           </div>
