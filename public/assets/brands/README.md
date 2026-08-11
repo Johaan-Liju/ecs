@@ -1,20 +1,29 @@
-# Brand logos go here
+# Brand logos
 
-SVG where possible, PNG with transparency otherwise. The filename must match
-the slug exactly — that is how the site finds it, and nothing else needs
-changing when you add one.
+**All 17 brands have artwork, plus `dalmia-dsp` for the sulphate-resisting
+line on material CM-08.** Nothing is falling back to a text box.
 
-    tata-tiscon.svg      ultratech.svg        jsw-neosteel.svg
-    jsw-cement.svg       dalmia.svg           vizag-steel.svg
-    chettinad.svg        sankar.svg           ramco.svg
-    ccl.svg              everest.svg          panther.svg
-    renacon-aac.svg      kelachandra.svg      finolex.svg
-    maxxite.svg          tata-structura.svg
+Generated files — do not edit these by hand. Put new artwork in `/logos/` at
+the project root and run:
 
-Any brand without a file renders as its name in a bordered box instead. That
-is intended, and it is the correct behaviour to leave in place: these are
-registered trademarks, so never generate, trace, recolour or substitute one.
-A wrong logo is worse than no logo.
+```powershell
+.\scripts\install-brand-logos.ps1
+```
 
-Ask each brand's dealer contact for their official brand-assets pack — that is
-the only source these should come from.
+That script does two things so the logos can sit straight on the page with no
+card behind them. It flood-fills a white background away from the edges
+inward — flood fill, not "delete all white", so white *inside* a logo
+survives (the UltraTech wordmark, the Tata Tiscon rebar). Artwork on a
+deliberate colour is detected and left alone: Everest orange, Ramco yellow,
+Renacon green, and the Chettinad and Kelachandra product panels stay as they
+are. Then everything is trimmed to its ink, so no logo carries dead margin.
+
+The filename becomes the slug and must match `src/data/brands.js`. Case,
+spaces and underscores are normalised (`Tata_Structura.PNG` → `tata-structura`),
+but spelling is not — `kelchandra.png` will not find `kelachandra`.
+
+If a file is ever missing, the brand renders as its name in a bordered box on
+the brand wall, and shows no logo at all on a material card (the product name
+is already there). That fallback is intended: these are registered trademarks,
+so never generate, trace, recolour or substitute one. A wrong logo is worse
+than none — ask the brand's dealer contact for their official assets pack.

@@ -3,21 +3,24 @@ import { useState } from "react";
 /* --------------------------------------------------------------------------
    One brand's logo.
 
-   Looks for `/assets/brands/<slug>.svg`, then `.png`, and if neither is on
-   disk falls back to the brand name in a bordered box. Nothing here draws or
-   approximates a logo — these are registered trademarks, and a wrong one is
-   worse than none. Dropping the real file into `/public/assets/brands/` is
-   all it takes to light it up.
+   Looks for `/assets/brands/<slug>.png`, then `.svg`, and if neither is on
+   disk falls back to the brand name in a bordered box — or to nothing at all
+   where the name is already on screen (`fallback="none"`).
+
+   Nothing here draws or approximates a logo. These are registered trademarks,
+   and a wrong one is worse than none. Dropping the real file into
+   `/public/assets/brands/` is the whole installation step.
    -------------------------------------------------------------------------- */
 
-const sourcesFor = (slug) => [`/assets/brands/${slug}.svg`, `/assets/brands/${slug}.png`];
+const sourcesFor = (slug) => [`/assets/brands/${slug}.png`, `/assets/brands/${slug}.svg`];
 
 export default function BrandLogo({
   slug,
   name,
-  height = 34,
+  height, // omit to size the logo purely from `className`
   decorative = false,
-  onFallback, // called once the artwork is confirmed missing
+  fallback = "name", // "name" = bordered text box, "none" = render nothing
+  onFallback,
   className = "",
 }) {
   const [attempt, setAttempt] = useState(0);
@@ -33,11 +36,12 @@ export default function BrandLogo({
   };
 
   if (exhausted) {
+    if (fallback === "none") return null;
     return (
       <span
         aria-hidden={decorative || undefined}
         className={`inline-flex items-center justify-center rounded-lg border border-navy/20 px-4 font-display text-sm font-semibold whitespace-nowrap text-navy/70 ${className}`}
-        style={{ height }}
+        style={height ? { height } : undefined}
       >
         {name}
       </span>
@@ -51,8 +55,8 @@ export default function BrandLogo({
       alt={decorative ? "" : name}
       aria-hidden={decorative || undefined}
       onError={nextSource}
-      style={{ height }}
-      className={`w-auto max-w-[9rem] object-contain ${className}`}
+      style={height ? { height } : undefined}
+      className={`object-contain ${className}`}
       loading="lazy"
       decoding="async"
     />

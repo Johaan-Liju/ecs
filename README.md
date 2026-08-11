@@ -41,12 +41,15 @@ the wordmark is navy itself.
 
 ## Brand logos
 
-`src/data/brands.js` lists all 17 brands. Each one's artwork is looked for at
-`public/assets/brands/<slug>.svg`, then `.png`. **Until a file is there the
-brand renders as its name in a bordered box** — that is deliberate. These are
-registered trademarks; never generate, trace or substitute one, because a
-wrong logo is worse than none. Dropping the real file in is the whole
-installation step, no code change.
+`src/data/brands.js` lists all 17 brands, each with the slug its artwork is
+found by. Put source files in `/logos/` and run
+`.\scripts\install-brand-logos.ps1` — it keys white backgrounds away, trims
+each logo to its ink, and writes `public/assets/brands/<slug>.png`. See that
+folder's README for the detail.
+
+**If a file is missing the brand renders as its name in a bordered box** — that
+is deliberate. These are registered trademarks; never generate, trace or
+substitute one, because a wrong logo is worse than none.
 
 ## Enquiry form
 

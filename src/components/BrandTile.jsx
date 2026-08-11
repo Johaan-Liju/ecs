@@ -12,13 +12,13 @@ export default function BrandTile({ slug, name }) {
 
   return (
     <>
-      <span className="flex h-16 items-center">
+      <span className="grid h-32 w-full place-items-center">
         <BrandLogo
           slug={slug}
           name={name}
-          height={missing ? 48 : 56}
+          height={missing ? 48 : undefined}
           onFallback={() => setMissing(true)}
-          className="opacity-75 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
+          className="max-h-32 max-w-full opacity-85 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
         />
       </span>
       {!missing && <span className="text-center text-sm text-navy/60">{name}</span>}

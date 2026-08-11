@@ -28,13 +28,16 @@ function Row({ items, reverse, speed, paused }) {
         const copy = i >= items.length;
         return (
           <li key={`${brand.slug}-${i}`} className="shrink-0">
-            <BrandLogo
-              slug={brand.slug}
-              name={brand.name}
-              decorative={copy}
-              height={38}
-              className="opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
-            />
+            {/* No card behind the logo — the artwork is background-keyed and
+                trimmed to its ink, so it sits straight on the page. */}
+            <span className="grid h-24 w-44 place-items-center">
+              <BrandLogo
+                slug={brand.slug}
+                name={brand.name}
+                decorative={copy}
+                className="max-h-24 max-w-full opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
+              />
+            </span>
           </li>
         );
       })}
@@ -48,10 +51,12 @@ export default function BrandMarquee({ items = [], speed = 56 }) {
 
   if (reduced) {
     return (
-      <ul className="hold flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+      <ul className="hold flex flex-wrap items-center justify-center gap-4">
         {items.map((brand) => (
           <li key={brand.slug}>
-            <BrandLogo slug={brand.slug} name={brand.name} height={38} className="opacity-70" />
+            <span className="grid h-24 w-44 place-items-center">
+              <BrandLogo slug={brand.slug} name={brand.name} className="max-h-24 max-w-full" />
+            </span>
           </li>
         ))}
       </ul>

@@ -28,3 +28,5 @@ export const BRANDS = [
   { slug: "maxxite", name: "Maxxite" },
   { slug: "tata-structura", name: "Tata Structura" },
 ];
+
+export const getBrand = (slug) => BRANDS.find((b) => b.slug === slug);
