@@ -10,7 +10,7 @@ export default function Footer() {
       <Backdrop tone="dark" mark="br" markOpacity={0.09} />
       <div className="hold grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1.2fr]">
         <div>
-          <LogoMark size={44} tone="light" />
+          <LogoMark sizeClass="h-20 sm:h-24" tone="light" />
           <p className="mt-4 max-w-xs text-sm text-white/65">
             Wholesale dealers and stockists of building materials since 1982.
           </p>

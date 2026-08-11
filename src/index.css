@@ -23,6 +23,10 @@
   --color-concrete: #f2f4f7;
   --color-concrete-line: #dfe4ec;
 
+  /* How far the page starts below the fixed header. The header itself grows
+     with the logo, so this is the one number to change if that size moves. */
+  --header-h: 96px;
+
   --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "DM Mono", ui-monospace, SFMono-Regular, monospace;
@@ -31,6 +35,12 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --header-h: 120px;
+    }
   }
 
   body {

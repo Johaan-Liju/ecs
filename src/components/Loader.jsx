@@ -36,7 +36,7 @@ export default function Loader() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <LogoMark size={64} tone="light" alt="" />
+            <LogoMark sizeClass="h-24 sm:h-32" tone="light" alt="" />
           </motion.div>
           <motion.span
             className="absolute bottom-16 font-mono text-[0.625rem] tracking-[0.3em] text-white/45 uppercase"

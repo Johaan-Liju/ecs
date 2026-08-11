@@ -81,7 +81,7 @@ export default function Header() {
               transition={{ duration: 0.3, ease: "easeOut" }}
               style={{ transformOrigin: "left center" }}
             >
-              <LogoMark size={40} />
+              <LogoMark sizeClass="h-14 sm:h-18 md:h-20" />
             </motion.span>
           </Link>
 
@@ -148,48 +148,50 @@ export default function Header() {
           style={{ scaleX: progress }}
           aria-hidden
         />
-      </motion.header>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            id="mobile-menu"
-            aria-label="Mobile"
-            className="fixed inset-x-0 top-[68px] z-40 border-b border-concrete-line bg-white px-6 pt-4 pb-6 md:hidden"
-            initial={reduced ? false : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduced ? { opacity: 1 } : { opacity: 0, y: -12 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-          >
-            <ul className="flex flex-col">
-              {LINKS.map((l) => (
-                <li key={l.to} className="border-b border-concrete-line last:border-0">
-                  <NavLink
-                    to={l.to}
-                    end={l.to === "/"}
-                    className={({ isActive }) =>
-                      `block py-3.5 font-display text-lg font-semibold ${
-                        isActive ? "text-navy" : "text-navy/60"
-                      }`
-                    }
-                  >
-                    {l.label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-            <a
-              href={waLink("Hello ECS, I would like a rate for some materials.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 flex items-center justify-center gap-2 rounded-full bg-mark px-4 py-3 font-display font-semibold text-ink"
+        {/* Inside the header, so it hangs off whatever height the header
+            currently is — no offset to keep in sync with the logo size. */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              id="mobile-menu"
+              aria-label="Mobile"
+              className="border-b border-concrete-line bg-white px-6 pt-4 pb-6 md:hidden"
+              initial={reduced ? false : { opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduced ? { opacity: 1 } : { opacity: 0, y: -12 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
             >
-              <MessageCircle size={17} aria-hidden />
-              WhatsApp us
-            </a>
-          </motion.nav>
-        )}
-      </AnimatePresence>
+              <ul className="flex flex-col">
+                {LINKS.map((l) => (
+                  <li key={l.to} className="border-b border-concrete-line last:border-0">
+                    <NavLink
+                      to={l.to}
+                      end={l.to === "/"}
+                      className={({ isActive }) =>
+                        `block py-3.5 font-display text-lg font-semibold ${
+                          isActive ? "text-navy" : "text-navy/60"
+                        }`
+                      }
+                    >
+                      {l.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={waLink("Hello ECS, I would like a rate for some materials.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 flex items-center justify-center gap-2 rounded-full bg-mark px-4 py-3 font-display font-semibold text-ink"
+              >
+                <MessageCircle size={17} aria-hidden />
+                WhatsApp us
+              </a>
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </motion.header>
     </>
   );
 }

@@ -92,7 +92,7 @@ export default function App() {
       <ScrollToTop />
       <Loader />
       <Header />
-      <div className="pt-[68px]">
+      <div className="pt-[var(--header-h)]">
         <AnimatedRoutes />
         <Footer />
       </div>
