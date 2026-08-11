@@ -1,0 +1,71 @@
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Brand assets
+
+The logo is never drawn in code. Everything comes from the one file the client
+supplied, `ecs_logo.jpeg` in the project root:
+
+| File | Derived how | Used by |
+|---|---|---|
+| `public/assets/ecs_logo.jpeg` | the original, untouched | source of truth |
+| `public/assets/ecs_logo.png` | cropped, white keyed to transparent | header, footer, loader |
+| `public/assets/ecs_mark.png` | the tower glyph alone | section watermarks, icons |
+| `public/assets/ecs_mark_white.png` | same alpha, white — decorative only | watermark on navy sections |
+| `public/favicon-*.png`, `public/apple-touch-icon.png` | mark centred on white | browser tabs, home screens |
+| `public/assets/og.jpg` | lockup on concrete grey, 1200×630 | link previews |
+
+When a new logo arrives, drop it in the project root and run:
+
+```powershell
+.\scripts\make-logo-assets.ps1 -Source .\new_logo.png
+```
+
+Re-measure the crop boxes near the bottom of that script if the artwork is a
+different size or arrangement. The palette in `src/index.css` was sampled from
+the artwork too — the navy is the wordmark, the two blues are the tower, the
+mint is the offset behind the letters.
+
+On navy the artwork sits on a white plate rather than being recoloured, since
+the wordmark is navy itself.
+
+## Brand logos
+
+`src/data/brands.js` lists all 17 brands. Each one's artwork is looked for at
+`public/assets/brands/<slug>.svg`, then `.png`. **Until a file is there the
+brand renders as its name in a bordered box** — that is deliberate. These are
+registered trademarks; never generate, trace or substitute one, because a
+wrong logo is worse than none. Dropping the real file in is the whole
+installation step, no code change.
+
+## Enquiry form
+
+`/contact` offers three routes to ECS: WhatsApp (the default), Email, and a
+call back. WhatsApp builds a `wa.me` deep link; the other two POST to
+Web3Forms.
+
+Copy `.env.example` to `.env` and set `VITE_FORM_ENDPOINT` to a Web3Forms
+access key. Without it the two posted paths disable themselves and say so on
+the page — WhatsApp keeps working regardless.
+
+One constraint worth knowing before changing anything here: **`wa.me` links
+carry text only.** Attachments cannot ride along, which is why the upload zone
+appears on the email path alone. Never wire it to the WhatsApp path — the file
+would be dropped and the enquiry silently lost.
+
+If you point the form at a different service, update `connect-src` in
+`public/_headers` to match, or the browser will block the request.
+
+## Expanding the Oxlint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.

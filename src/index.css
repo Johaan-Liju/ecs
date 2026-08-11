@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* --------------------------------------------------------------------------
+   Palette sampled straight out of ecs_logo.jpeg — the indigo of the wordmark,
+   the two blues of the tower, and the mint offset behind the letters. Plus a
+   marking yellow accent and concrete greys.
+   -------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #101334;
+  --color-navy: #292b78; /* the ECS wordmark */
+  --color-navy-soft: #3a3d94;
+  --color-azure: #2b7fbc; /* tower, lower storeys */
+  --color-azure-soft: #52a9dc; /* tower, the tall one */
+  --color-azure-mist: #eaf2fb;
+  --color-mint: #5ac4c4; /* the offset behind the letters */
+  --color-mark: #ffc300;
+
+  /* Crosshair only. A deep, saturated blue — clearly distinct from the muted
+     navy of the dark sections. On its own it would vanish against those, so it
+     is always paired with the white halo below: the core carries it on light
+     backgrounds, the halo carries it on dark ones. */
+  --color-signal: #0f2d9e;
+  --color-concrete: #f2f4f7;
+  --color-concrete-line: #dfe4ec;
+
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-concrete);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* One visible focus treatment for the whole site. */
+  :focus-visible {
+    outline: 3px solid var(--color-mark);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-mark);
+    color: var(--color-ink);
+  }
+
+  /* The native pointer is hidden only once <Crosshair> has confirmed a fine
+     pointer and no reduced-motion preference and set this class. If the script
+     never runs, the arrow stays — you can never end up with no pointer at all. */
+  body.crosshair-on,
+  body.crosshair-on * {
+    cursor: none !important;
+  }
+}
+
+@layer components {
+  .hold {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Blueprint paper: a fine grid with a heavier line every fifth cell, faded
+     out at the top and bottom so it never butts hard against a section edge. */
+  .bp-grid {
+    --bp-minor: rgba(28, 36, 80, 0.055);
+    --bp-major: rgba(28, 36, 80, 0.1);
+    background-image:
+      linear-gradient(to right, var(--bp-major) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--bp-major) 1px, transparent 1px),
+      linear-gradient(to right, var(--bp-minor) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--bp-minor) 1px, transparent 1px);
+    background-size:
+      230px 230px,
+      230px 230px,
+      46px 46px,
+      46px 46px;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 14%,
+      black 86%,
+      transparent 100%
+    );
+  }
+
+  .bp-grid-dark {
+    --bp-minor: rgba(255, 255, 255, 0.05);
+    --bp-major: rgba(255, 255, 255, 0.09);
+  }
+
+  /* Halo behind the crosshair. Invisible against concrete and white, where the
+     deep-blue core does the work; on the navy bands it is what you actually
+     see. The soft second shadow keeps it from looking like a hard sticker. */
+  .ch-halo {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.78),
+      0 0 7px rgba(255, 255, 255, 0.45);
+  }
+
+  /* The target ring is an outline, so it needs the halo on both edges. */
+  .ch-halo-ring {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 0 7px rgba(255, 255, 255, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Marquee is CSS-driven so it keeps running off the main thread; the component
+   pauses it on hover and disables it under reduced motion. */
+@keyframes ecs-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
