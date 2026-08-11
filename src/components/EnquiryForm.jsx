@@ -7,8 +7,14 @@ import SelectField from "./SelectField";
 import SegmentedControl from "./SegmentedControl";
 import FileDrop from "./FileDrop";
 import { useEnquiry } from "../context/enquiryContext";
-import { waLink } from "../lib/contact";
-import { hasFormBackend, isEmail, normalisePhone, postEnquiry } from "../lib/enquiryForm";
+import { CONTACT, waLink } from "../lib/contact";
+import {
+  attachmentsEnabled,
+  hasFormBackend,
+  isEmail,
+  normalisePhone,
+  postEnquiry,
+} from "../lib/enquiryForm";
 
 /* --------------------------------------------------------------------------
    The visitor picks how the enquiry reaches ECS. WhatsApp is the default —
@@ -140,7 +146,7 @@ export default function EnquiryForm() {
           enquiry_list: isCallback ? "" : asText(),
           message: composeMessage(),
         },
-        files: isEmailPath ? files : [],
+        files: isEmailPath && attachmentsEnabled ? files : [],
         onProgress: setProgress,
       });
       setStatus("sent");
@@ -305,12 +311,21 @@ export default function EnquiryForm() {
       </div>
 
       {/* ------------------------------------------------- attachments */}
-      {isEmailPath && (
-        <div className="mt-5">
-          <p className="mb-2 text-sm font-semibold text-navy">Drawings or lists</p>
-          <FileDrop files={files} onChange={setFiles} progress={progress} busy={busy} />
-        </div>
-      )}
+      {isEmailPath &&
+        (attachmentsEnabled ? (
+          <div className="mt-5">
+            <p className="mb-2 text-sm font-semibold text-navy">Drawings or lists</p>
+            <FileDrop files={files} onChange={setFiles} progress={progress} busy={busy} />
+          </div>
+        ) : (
+          <p className="mt-5 rounded-xl bg-azure-mist px-4 py-3 text-sm text-navy/70">
+            Have a drawing or a bar bending schedule? Send it to{" "}
+            <a href={`mailto:${CONTACT.email}`} className="font-semibold text-azure underline">
+              {CONTACT.email}
+            </a>{" "}
+            or on WhatsApp — this form takes text only.
+          </p>
+        ))}
 
       {channel === "whatsapp" && (
         <p className="mt-5 rounded-xl bg-azure-mist px-4 py-3 text-sm text-navy/70">

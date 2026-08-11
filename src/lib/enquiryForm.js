@@ -18,6 +18,18 @@ const KEY = import.meta.env.VITE_FORM_ENDPOINT ?? "";
 export const hasFormBackend = Boolean(KEY) && !KEY.trim().startsWith("[");
 
 /**
+ * File uploads are a Web3Forms **Pro** feature. Verified against the live key:
+ * a POST carrying `attachment_1` comes back 400 "You are trying to use a Pro
+ * feature, Please upgrade to use file uploads" — the whole enquiry is lost,
+ * not just the file.
+ *
+ * So the upload zone stays hidden until someone sets VITE_FORM_ATTACHMENTS to
+ * true, which should happen at the same moment the plan is upgraded.
+ */
+export const attachmentsEnabled =
+  hasFormBackend && String(import.meta.env.VITE_FORM_ATTACHMENTS ?? "") === "true";
+
+/**
  * A ten-digit Indian number, however the visitor chose to punctuate it.
  *
  * Country code and trunk zero are only stripped while the number is still too

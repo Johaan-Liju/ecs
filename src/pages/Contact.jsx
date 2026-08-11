@@ -1,3 +1,5 @@
+import { MapPin } from "lucide-react";
+
 import MaskHeading from "../components/MaskHeading";
 import Reveal from "../components/Reveal";
 import Stagger from "../components/Stagger";
@@ -37,7 +39,6 @@ export default function Contact() {
     },
     { term: "Address", node: CONTACT.address, note: "Elappunkal Enterprises" },
     { term: "Service area", node: CONTACT.serviceArea.join(" · "), note: "Own fleet, 0.5 MT to 30 MT." },
-    { term: "GSTIN", node: CONTACT.gstin, note: "On every business invoice." },
   ];
 
   return (
@@ -97,15 +98,28 @@ export default function Contact() {
       <section aria-label="Location">
         <Reveal className="relative">
           <iframe
-            title="ECS service area on Google Maps"
+            title="ECS — Elappunkal Enterprises on Google Maps"
             src={MAP_EMBED}
             loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
             className="block h-[380px] w-full border-0 grayscale-[0.25] sm:h-[460px]"
           />
-          {isPlaceholder(CONTACT.mapsUrl) && (
+          {isPlaceholder(CONTACT.mapsUrl) ? (
             <p className="hold py-3 font-mono text-xs text-navy/45">
               Showing the service area. [EXACT YARD PIN — CLIENT TO SUPPLY]
+            </p>
+          ) : (
+            <p className="hold py-3 text-sm">
+              <a
+                href={CONTACT.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 font-display font-semibold text-navy hover:text-azure"
+              >
+                <MapPin size={15} aria-hidden />
+                Open in Google Maps
+              </a>
             </p>
           )}
         </Reveal>

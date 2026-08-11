@@ -58,6 +58,15 @@ Copy `.env.example` to `.env` and set `VITE_FORM_ENDPOINT` to a Web3Forms
 access key. Without it the two posted paths disable themselves and say so on
 the page — WhatsApp keeps working regardless.
 
+**Attachments need a Web3Forms Pro plan.** This was tested against the live
+key: a submission carrying a file comes back `400 "You are trying to use a Pro
+feature"` and the *entire* enquiry is rejected, not just the file. So the
+upload zone sits behind `VITE_FORM_ATTACHMENTS`, off by default; the email
+path tells visitors to send drawings by email or WhatsApp instead.
+`FileDrop.jsx` is complete and wired — turn the flag on the day the plan is
+upgraded, and check the plan's real per-file ceiling against `MAX_FILES` and
+`MAX_BYTES` at the top of that file.
+
 One constraint worth knowing before changing anything here: **`wa.me` links
 carry text only.** Attachments cannot ride along, which is why the upload zone
 appears on the email path alone. Never wire it to the WhatsApp path — the file

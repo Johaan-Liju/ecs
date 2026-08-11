@@ -9,9 +9,15 @@ import { FileText, Paperclip, X } from "lucide-react";
    the whole batch because of one bad file.
    -------------------------------------------------------------------------- */
 
+/* These two must not exceed what the form plan actually accepts, or the
+   attachment is dropped in transit and the enquiry is silently lost. A free
+   Web3Forms key takes ONE file of up to 5 MB. On the Pro plan, check the
+   plan's real ceiling and raise both — every label and error message below is
+   derived from them, so nothing else needs touching. */
+const MAX_FILES = 1;
+const MAX_BYTES = 5 * 1024 * 1024;
+
 const ACCEPTED = [".pdf", ".jpg", ".jpeg", ".png", ".webp", ".dwg", ".xlsx", ".docx"];
-const MAX_FILES = 5;
-const MAX_BYTES = 10 * 1024 * 1024;
 
 const keyOf = (file) => `${file.name}:${file.size}:${file.lastModified}`;
 const extOf = (name) => name.slice(name.lastIndexOf(".")).toLowerCase();
@@ -20,7 +26,12 @@ const isImage = (file) => file.type.startsWith("image/");
 const formatSize = (bytes) =>
   bytes < 1024 * 1024
     ? `${Math.max(1, Math.round(bytes / 1024))} KB`
-    : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    : `${(bytes / 1024 / 1024).toFixed(1).replace(/\.0$/, "")} MB`;
+
+const LIMIT_LABEL =
+  MAX_FILES === 1
+    ? `One file, up to ${formatSize(MAX_BYTES)}`
+    : `Up to ${MAX_FILES} files, ${formatSize(MAX_BYTES)} each`;
 
 export default function FileDrop({ files, onChange, progress = null, busy = false }) {
   const [dragging, setDragging] = useState(false);
@@ -42,11 +53,17 @@ export default function FileDrop({ files, onChange, progress = null, busy = fals
 
     for (const file of incoming) {
       if (next.length >= MAX_FILES) {
-        rejected.push(`${file.name} — only ${MAX_FILES} files can go with one enquiry.`);
+        rejected.push(
+          MAX_FILES === 1
+            ? `${file.name} — only one file can go with an enquiry. Remove the other first.`
+            : `${file.name} — only ${MAX_FILES} files can go with one enquiry.`,
+        );
       } else if (!ACCEPTED.includes(extOf(file.name))) {
         rejected.push(`${file.name} — we can take ${ACCEPTED.join(" ")} only.`);
       } else if (file.size > MAX_BYTES) {
-        rejected.push(`${file.name} is ${formatSize(file.size)} — the limit is 10 MB per file.`);
+        rejected.push(
+          `${file.name} is ${formatSize(file.size)} — the limit is ${formatSize(MAX_BYTES)} per file.`,
+        );
       } else if (next.some((f) => keyOf(f) === keyOf(file))) {
         rejected.push(`${file.name} is already attached.`);
       } else {
@@ -100,13 +117,13 @@ export default function FileDrop({ files, onChange, progress = null, busy = fals
           .
         </p>
         <p className="mt-1 text-xs text-navy/45">
-          Up to {MAX_FILES} files, 10 MB each · PDF, images, DWG, XLSX, DOCX
+          {LIMIT_LABEL} · PDF, images, DWG, XLSX, DOCX
         </p>
 
         <input
           ref={inputRef}
           type="file"
-          multiple
+          multiple={MAX_FILES > 1}
           accept={ACCEPTED.join(",")}
           className="sr-only"
           onChange={(e) => {
